@@ -78,12 +78,18 @@ const fields = (options: Options) =>
         }
         return {
           name: field,
-          onChange: event => {
-            // Some custom components like react-select pass the target directly.
-            const target = event.target || event;
-            const { type, checked, value } = target;
-            const isCheckbox = type && type.toLowerCase() === 'checkbox';
-            onChange(field, isCheckbox ? checked : value);
+          // issue #1357(MUI): DatePicker in Marterial-UI just passes value in second
+          // parameter and leaves null in firt parameter.
+          onChange: (event, optValue) => {
+            if (event) {
+              // Some custom components like react-select pass the target directly.
+              const target = event.target || event;
+              const { type, checked, value } = target;
+              const isCheckbox = type && type.toLowerCase() === 'checkbox';
+              onChange(field, isCheckbox ? checked : value);
+            } else {
+              onChange(field, optValue);
+            }
           },
         };
       }

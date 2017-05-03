@@ -10,6 +10,10 @@ import configureStore from '../common/configureStore';
 import localforage from 'localforage';
 import uuid from 'uuid';
 import { persistStore } from 'redux-persist';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// issue #1357(MUI): https://github.com/callemall/material-ui#react-tap-event-plugin
+injectTapEventPlugin();
 
 const initialState = window.__INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
 

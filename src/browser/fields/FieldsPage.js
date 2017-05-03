@@ -3,7 +3,15 @@ import React from 'react';
 import buttonsMessages from '../../common/app/buttonsMessages';
 import linksMessages from '../../common/app/linksMessages';
 import { Box, Button, Field, PageHeader } from '../../common/components';
-import { Checkbox, Form, Radio, Title } from '../components';
+import {
+  Checkbox,
+  Form,
+  Radio,
+  Title,
+  // issue #1357(MUI)
+  FieldDatePicker,
+  FieldTextArea,
+} from '../components';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'ramda';
 import { fields } from '../../common/lib/redux-fields';
@@ -24,6 +32,19 @@ const FieldsPage = ({ fields }) => {
         description="Simple and universal Redux forms"
       />
       <Form maxWidth={21} onSubmit={onSubmit}>
+        <FieldDatePicker
+          id="fields-datepicker1"
+          label={'Begin Date'}
+          marginRight={4}
+          minWidth={10}
+          {...fields.beginDate}
+        />
+        <FieldTextArea
+          id="fields-textarea1"
+          label={'Text Area'}
+          rowsMax={4}
+          {...fields.textArea}
+        />
         <Field
           {...fields.name}
           label="Name"
@@ -68,6 +89,8 @@ export default compose(
   fields({
     path: 'fieldsPage',
     fields: [
+      'beginDate',
+      'textArea',
       'name',
       'description',
       'likeCats', // checkbox

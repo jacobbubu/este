@@ -49,33 +49,39 @@ const DivButton = (
   />
 );
 
-type BaseRootProps = {
-  children?: any,
-  felaRenderer?: Object,
-  store: Object,
-};
-
 // This is reused in src/server/frontend/render.js
-const BaseRoot = (
-  {
-    store,
-    felaRenderer = configureFela(),
-    children,
-  }: BaseRootProps,
-) => (
-  <Redux store={store}>
-    <Fela
-      Button={props => <DivButton {...props} />}
-      Image={props => <img {...props} />} // eslint-disable-line jsx-a11y/img-has-alt
-      Text={props => <span {...props} />}
-      TextInput={props => <input {...props} />}
-      View={props => <div {...props} />}
-      mountNode={process.env.IS_BROWSER && getFelaMountNode()}
-      renderer={felaRenderer}
-    >
-      {children}
-    </Fela>
-  </Redux>
-);
+// issue #1357(MUI), I've changed BaseRoot from stateless to statefull
+// for providing userAgent in context
+class BaseRoot extends React.Component {
+  getChildContext() {
+    const ua = this.props.userAgent ||
+      (process.env.IS_BROWSER ? global.navigator.userAgent : undefined);
+    return { userAgent: ua || 'all' };
+  }
+
+  render() {
+    const { store, felaRenderer = configureFela(), children } = this.props;
+
+    return (
+      <Redux store={store}>
+        <Fela
+          Button={props => <DivButton {...props} />}
+          Image={props => <img {...props} />} // eslint-disable-line jsx-a11y/img-has-alt
+          Text={props => <span {...props} />}
+          TextInput={props => <input {...props} />}
+          View={props => <div {...props} />}
+          mountNode={process.env.IS_BROWSER && getFelaMountNode()}
+          renderer={felaRenderer}
+        >
+          {children}
+        </Fela>
+      </Redux>
+    );
+  }
+}
+
+BaseRoot.childContextTypes = {
+  userAgent: React.PropTypes.string,
+};
 
 export default BaseRoot;

@@ -14,6 +14,10 @@ import { RedirectException } from 'found';
 import { RouterProvider } from 'found/lib/server';
 import { ServerProtocol } from 'farce';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// issue #1357(MUI): https://github.com/callemall/material-ui#react-tap-event-plugin
+injectTapEventPlugin();
 
 // createInitialState loads files, so it must be called once.
 const initialState = createInitialState();
@@ -44,10 +48,15 @@ const createStore = (found, req): Object =>
     platformStoreEnhancers: found.storeEnhancers,
   });
 
-const renderBody = (renderArgs, store) => {
+const renderBody = (renderArgs, store, req) => {
   const felaRenderer = configureFela();
   const html = renderToString(
-    <BaseRoot felaRenderer={felaRenderer} store={store}>
+    <BaseRoot
+      felaRenderer={felaRenderer}
+      store={store}
+      // issue #1357(MUI): in SSR, userAgent comes from request object
+      userAgent={req.headers['user-agent']}
+    >
       <RouterProvider router={renderArgs.router}>
         {createRouterRender(renderArgs)}
       </RouterProvider>
@@ -97,7 +106,8 @@ const render = async (req: Object, res: Object, next: Function) => {
   const store = createStore(found, req);
   try {
     await found.getRenderArgs(store, renderArgs => {
-      const body = renderBody(renderArgs, store);
+      // issue #1357(MUI): pass-through request object
+      const body = renderBody(renderArgs, store, req);
       const html = renderHtml(store.getState(), body);
       res.status(renderArgs.error ? renderArgs.error.status : 200).send(html);
     });
