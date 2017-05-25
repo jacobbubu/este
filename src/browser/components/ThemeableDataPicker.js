@@ -13,18 +13,13 @@ const fontSizeWithComputedLineHeight = (typography, size) => {
 export const computeStyle = (
   theme: Theme,
   {
-    fontFamily = theme.text.fontFamily,
     size = 0,
-    bold,
-    color = 'black',
     lineHeight,
     ...props
   },
 ) => {
   let style = {
     ...fontSizeWithComputedLineHeight(theme.typography, size),
-    color: theme.colors[color],
-    fontFamily,
   };
 
   if (lineHeight) {
