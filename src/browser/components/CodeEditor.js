@@ -42,12 +42,13 @@ class EsteCodeEditor extends React.Component {
     return (
       <Box
         width={width || 30}
-        height={height || 20} >
+        height={height || 20}
+      >
         <MonacoEditor
           requireConfig={{
-            url: 'assets/require.min.js',
+            url: '/assets/require.min.js',
             paths: {
-              vs: 'assets/vs',
+              vs: '/assets/vs',
             },
           }}
           language={language || 'javascript'}
