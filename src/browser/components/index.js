@@ -7,5 +7,6 @@ export { default as Radio } from './Radio';
 export { default as Title } from './Title';
 export { default as focus } from './focus';
 export { default as fxbml } from './fxbml';
+export { default as CodeEditor } from './CodeEditor';
 
 // TODO: Checkbox, Link, and Radio should be universal.

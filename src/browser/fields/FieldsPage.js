@@ -3,7 +3,7 @@ import React from 'react';
 import buttonsMessages from '../../common/app/buttonsMessages';
 import linksMessages from '../../common/app/linksMessages';
 import { Box, Button, Field, PageHeader } from '../../common/components';
-import { Checkbox, Form, Radio, Title } from '../components';
+import { Checkbox, Form, Radio, Title, CodeEditor } from '../components';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'ramda';
 import { fields } from '../../common/lib/redux-fields';
@@ -22,6 +22,16 @@ const FieldsPage = ({ fields }) => {
       <PageHeader
         heading="redux-fields"
         description="Simple and universal Redux forms"
+      />
+      <CodeEditor
+        width={40}
+        height={10}
+      />
+      <Box height={1} />
+      <CodeEditor
+        width={40}
+        height={10}
+        code={"console.log('World');\n"}
       />
       <Form maxWidth={21} onSubmit={onSubmit}>
         <Field

@@ -22,6 +22,13 @@ const loaders = {
   css: '',
 };
 
+const ModecoEditorSrc = path.join(
+  constants.NODE_MODULES_DIR,
+  'monaco-editor',
+  'min',
+  'vs',
+);
+
 const serverIp = config.remoteHotReload
   ? ip.address() // Dynamic IP address enables hot reload on remote devices.
   : 'localhost';
@@ -146,6 +153,18 @@ const makeConfig = options => {
           },
         }),
       ];
+      plugins.push(new CopyWebpackPlugin(
+        [
+          {
+            from: path.join(constants.ASSETS_DIR, 'vendorjs', 'require.min.js'),
+            to: './',
+          },
+          {
+            from: ModecoEditorSrc,
+            to: 'vs',
+          },
+        ],
+      ));
       if (isDevelopment) {
         plugins.push(
           new webpack.HotModuleReplacementPlugin(),
